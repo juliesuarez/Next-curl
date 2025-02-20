@@ -1,0 +1,5 @@
+FROM node:16
+WORKDIR /app
+COPY vr_service.js ./
+EXPOSE 5001
+CMD ["node", "vr_service.js"]

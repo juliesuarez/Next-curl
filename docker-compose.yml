@@ -1,0 +1,60 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api
+
+  api:
+    build:
+      context: ./backend/api
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+
+  realtime:
+    build:
+      context: ./backend/realtime
+      dockerfile: Dockerfile
+    ports:
+      - "4000:4000"
+
+  ai:
+    build:
+      context: ./backend/ai_vr
+      dockerfile: Dockerfile.ai
+    ports:
+      - "5000:5000"
+
+  vr:
+    build:
+      context: ./backend/ai_vr
+      dockerfile: Dockerfile.vr
+    ports:
+      - "5001:5001"
+
+  postgres:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: nextcurl
+    ports:
+      - "5432:5432"
+
+  mongodb:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"

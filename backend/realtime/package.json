@@ -1,0 +1,12 @@
+{
+  "name": "next-curl-realtime",
+  "version": "1.0.0",
+  "description": "Realtime service for Next-curl using Node.js",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "ws": "latest"
+  }
+}
