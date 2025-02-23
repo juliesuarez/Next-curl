@@ -6,23 +6,28 @@ jobs:
   frontend:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Set up Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: '16'
-      - run: cd frontend && npm install && npm run test
+          node-version: "22"
+      - run: |
+          cd frontend
+          npm install
+          npm run test
 
   backend_api:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
-          python-version: '3.9'
-      - run: cd backend/api && pip install -r requirements.txt && python 
-manage.py check
+          python-version: "3.13"
+      - run: |
+          cd backend/api
+          pip install -r requirements.txt
+          python manage.py check
 
   realtime:
     runs-on: ubuntu-latest
@@ -31,8 +36,11 @@ manage.py check
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '16'
-      - run: cd backend/realtime && npm install && npm start -- --version
+          node-version: "22"
+      - run: |
+          cd backend/realtime
+          npm install
+          npm start -- --version
 
   ai_service:
     runs-on: ubuntu-latest
@@ -41,6 +49,8 @@ manage.py check
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.9'
-      - run: cd backend/ai_vr && pip install -r requirements.txt && python 
-ai_service.py
+          python-version: "3.13"
+      - run: |
+          cd backend/ai_vr
+          pip install -r requirements.txt
+          python ai_service.py
