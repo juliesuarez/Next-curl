@@ -35,6 +35,12 @@ services:
       - DJANGO_DATABASE_NAME=nextcurl
       - DJANGO_DATABASE_USER=user
       - DJANGO_DATABASE_PASSWORD=password
+      - POSTGRES_HOST=postgres
+      - POSTGRES_DB=nextcurl
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+      - MONGO_HOST=mongodb
+      - REDIS_HOST=redis
     depends_on:
       - postgres
 
@@ -77,11 +83,17 @@ services:
     image: mongo:latest
     ports:
       - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
 
   redis:
-    image: redis:latest
+    image: redis:alpine
     ports:
       - "6379:6379"
+    volumes:
+      - redis_data:/data
 
 volumes:
   postgres_data:
+  mongodb_data:
+  redis_data:

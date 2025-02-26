@@ -6,6 +6,7 @@ from django.db.models import Avg, Count
 from django.utils import timezone
 from .models import Course, Lesson, Enrollment, LessonProgress
 from .serializers import CourseSerializer, LessonSerializer, EnrollmentSerializer, CourseAnalyticsSerializer, EnrollmentAnalyticsSerializer
+from django.db import models
 
 class CourseViewSet(viewsets.ModelViewSet):
     queryset = Course.objects.all()

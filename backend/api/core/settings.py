@@ -25,6 +25,7 @@ INSTALLED_APPS = [
     "rest_framework_simplejwt",
     "courses",
     "accounts",
+    'rest_framework_simplejwt.token_blacklist',
 ]
 
 MIDDLEWARE = [
@@ -59,13 +60,28 @@ WSGI_APPLICATION = "core.wsgi.application"
 
 # Database
 DATABASES = {
-    "default": {
-        "ENGINE": os.getenv("DJANGO_DATABASE_ENGINE", "django.db.backends.postgresql"),
-        "HOST": os.getenv("DJANGO_DATABASE_HOST", "localhost"),
-        "NAME": os.getenv("DJANGO_DATABASE_NAME", "nextcurl"),
-        "USER": os.getenv("DJANGO_DATABASE_USER", os.getenv("USER")),
-        "PASSWORD": os.getenv("DJANGO_DATABASE_PASSWORD", ""),
-        "PORT": os.getenv("DJANGO_DATABASE_PORT", "5432"),
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.getenv('POSTGRES_DB', 'nextcurl'),
+        'USER': os.getenv('POSTGRES_USER', os.getenv('USER')),
+        'PASSWORD': os.getenv('POSTGRES_PASSWORD', ''),
+        'HOST': os.getenv('POSTGRES_HOST', 'localhost'),
+        'PORT': os.getenv('POSTGRES_PORT', '5432'),
+    }
+}
+
+# Redis configuration
+REDIS_HOST = os.getenv('REDIS_HOST', 'localhost')
+REDIS_PORT = int(os.getenv('REDIS_PORT', 6379))
+REDIS_DB = int(os.getenv('REDIS_DB', 0))
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': f'redis://{REDIS_HOST}:{REDIS_PORT}/{REDIS_DB}',
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+        }
     }
 }
 
@@ -108,7 +124,14 @@ REST_FRAMEWORK = {
 }
 
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=30),
-    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=30),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    'ROTATE_REFRESH_TOKENS': True,
+    'BLACKLIST_AFTER_ROTATION': True,
+    'UPDATE_LAST_LOGIN': True,
     'AUTH_HEADER_TYPES': ('Bearer',),
+    'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
 }
+
+# Add to existing settings
+DATABASE_ROUTERS = ['core.databases.routers.DatabaseRouter']
